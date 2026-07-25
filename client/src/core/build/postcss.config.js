@@ -14,6 +14,13 @@ const postcssMixins = require("postcss-mixins");
 const postcssPrependImports = require("postcss-prepend-imports");
 const postcssAdvancedVariables = require("postcss-advanced-variables");
 
+let postcssRtlcss;
+try {
+  postcssRtlcss = require("postcss-rtlcss");
+} catch (e) {
+  // If postcss-rtlcss is not installed yet, skip gracefully
+}
+
 delete require.cache[paths.appSassLikeVariables];
 const sassLikeVariables = require(paths.appSassLikeVariables).default;
 
@@ -57,6 +64,8 @@ module.exports = {
     postcssAdvancedVariables({ variables: postCssVariables }),
     // Provides a modern CSS environment.
     postcssPresetEnv(),
+    // Auto-generate RTL styles for dir="rtl"
+    ...(postcssRtlcss ? [postcssRtlcss({ mode: "override" })] : []),
     // Fix known flexbox bugs.
     postcssFlexbugsFixes,
     // Vendor prefixing.
