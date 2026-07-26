@@ -35,3 +35,13 @@
 
   padding-left: var(--spacing-1);
 }
+
+:global([dir="rtl"]) .username {
+  padding-right: 0;
+  padding-left: var(--spacing-1);
+}
+
+:global([dir="rtl"]) .userBoxButton {
+  padding-left: 0;
+  padding-right: var(--spacing-1);
+}
