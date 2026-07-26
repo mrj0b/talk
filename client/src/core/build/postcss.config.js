@@ -17,8 +17,9 @@ const postcssAdvancedVariables = require("postcss-advanced-variables");
 let postcssRtlcss;
 try {
   postcssRtlcss = require("postcss-rtlcss");
+  console.log("[postcss-rtlcss] Loaded successfully");
 } catch (e) {
-  // If postcss-rtlcss is not installed yet, skip gracefully
+  console.warn("[postcss-rtlcss] Not installed, skipping RTL generation:", e.message);
 }
 
 delete require.cache[paths.appSassLikeVariables];
@@ -67,8 +68,24 @@ module.exports = {
     // Auto-generate RTL styles for dir="rtl"
     ...(postcssRtlcss
       ? [
-          (css, result) =>
-            postcssRtlcss({ mode: "override" }).Once(css, result),
+          (css, result) => {
+            try {
+              const postcss8 = require("postcss");
+              const rtlPlugin = postcssRtlcss({ mode: "override" });
+              const processed = postcss8([rtlPlugin]).process(
+                css.toString(),
+                { from: result.opts ? result.opts.from : undefined }
+              );
+              // .root triggers synchronous processing
+              const newRoot = processed.root;
+              css.removeAll();
+              for (const node of newRoot.nodes) {
+                css.append(node.clone());
+              }
+            } catch (err) {
+              console.error("[postcss-rtlcss] Error during transformation:", err.message);
+            }
+          },
         ]
       : []),
     // Fix known flexbox bugs.
