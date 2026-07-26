@@ -65,7 +65,12 @@ module.exports = {
     // Provides a modern CSS environment.
     postcssPresetEnv(),
     // Auto-generate RTL styles for dir="rtl"
-    ...(postcssRtlcss ? [postcssRtlcss({ mode: "override" })] : []),
+    ...(postcssRtlcss
+      ? [
+          (css, result) =>
+            postcssRtlcss({ mode: "override" }).Once(css, result),
+        ]
+      : []),
     // Fix known flexbox bugs.
     postcssFlexbugsFixes,
     // Vendor prefixing.
