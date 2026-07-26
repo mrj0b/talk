@@ -146,6 +146,8 @@ export const CoralContextProvider: FunctionComponent<{
       if (value.renderWindow.document.documentElement) {
         value.renderWindow.document.documentElement.setAttribute("dir", dir);
       }
+      const shadowElements = value.renderWindow.document.querySelectorAll("#coral, #coral-shadow-container");
+      shadowElements.forEach((el) => el.setAttribute("dir", dir));
     }
   }, [value.renderWindow, value.locales, value.dir, dir]);
 
