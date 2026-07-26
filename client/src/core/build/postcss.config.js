@@ -17,9 +17,8 @@ const postcssAdvancedVariables = require("postcss-advanced-variables");
 let postcssRtlcss;
 try {
   postcssRtlcss = require("postcss-rtlcss");
-  console.log("[postcss-rtlcss] Loaded successfully");
 } catch (e) {
-  console.warn("[postcss-rtlcss] Not installed, skipping RTL generation:", e.message);
+  // If postcss-rtlcss is not installed yet, skip gracefully
 }
 
 delete require.cache[paths.appSassLikeVariables];
@@ -83,7 +82,11 @@ module.exports = {
                 css.append(node.clone());
               }
             } catch (err) {
-              console.error("[postcss-rtlcss] Error during transformation:", err.message);
+              // eslint-disable-next-line no-console
+              console.error(
+                "[postcss-rtlcss] Error during transformation:",
+                err.message
+              );
             }
           },
         ]

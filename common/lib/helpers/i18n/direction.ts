@@ -14,7 +14,6 @@ export const RTL_LANGUAGES = [
   "khw", // Khowar
   "ks", // Kashmiri
   "ku", // Kurdish (Sorani)
-  "ps", // Pashto
   "sd", // Sindhi
   "ug", // Uighur
 ];
